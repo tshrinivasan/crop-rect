@@ -1,0 +1,4 @@
+*.pdf
+output
+media
+*/__pycache__/*
