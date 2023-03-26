@@ -9,7 +9,7 @@ import os
 output_dir = "media"
 
 def get_filename(path):
-    print("path",os.path.basename(path))
+    # print("path",os.path.basename(path))
     name = os.path.basename(path)
     return name.split('.')[0]
 
@@ -42,6 +42,7 @@ def crop_img(input_img):
             crop_img = im1[y:y+h, x:x+w]
             out_crop_img_path = os.path.join(output_dir,f"{get_filename(input_img)}_{count}.jpg")
             cv2.imwrite(out_crop_img_path,crop_img)
+    print(f"croped rectangles from image : {get_filename(input_img)}")
 
 
 
@@ -67,6 +68,7 @@ def convert_pdf_to_images(input_file):
         images = convert_from_path(output_filename)
         images[0].save(output_filename_img, 'JPEG')
         crop_img(output_filename_img)
+    print("Done cropping")
     return directory,True
 
         # for i in range(len(images)):
@@ -76,11 +78,11 @@ def convert_pdf_to_images(input_file):
 
 
 
-def cropimage(input_file):
-    if not output_file:
-        parts = input_file.split('.')
-        assert len(parts) > 1, "Can't automatically choose output name if there's no file extension!"
-        output_file = '.'.join([*parts[:-1], 'cropped', parts[-1]])
+# def cropimage(input_file):
+#     if not output_file:
+#         parts = input_file.split('.')
+#         assert len(parts) > 1, "Can't automatically choose output name if there's no file extension!"
+#         output_file = '.'.join([*parts[:-1], 'cropped', parts[-1]])
 
 
 
