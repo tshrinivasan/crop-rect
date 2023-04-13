@@ -40,7 +40,7 @@ def crop_img(input_img):
             #bounding the images
             cv2.rectangle(im,(x,y),(x+w,y+h),(0,255,0),2)
             crop_img = im1[y:y+h, x:x+w]
-            out_crop_img_path = os.path.join(output_dir,f"{get_filename(input_img)}_{count}.jpg")
+            out_crop_img_path = os.path.join(output_dir,f"{get_filename(input_img)}_{str(count).zfill(5)}.jpg")
             cv2.imwrite(out_crop_img_path,crop_img)
     print(f"croped rectangles from image : {get_filename(input_img)}")
 
@@ -59,7 +59,7 @@ def convert_pdf_to_images(input_file):
             os.makedirs(directory) 
             os.makedirs(os.path.join(directory,"img")) 
 
-        output_filename = os.path.join(directory,f"{get_filename(input_file)}-{i}.pdf")
+        output_filename = os.path.join(directory,f"{get_filename(input_file)}-{str(i).zfill(5)}.pdf")
 
         with open(output_filename, "wb") as outputStream:
             output.write(outputStream)
