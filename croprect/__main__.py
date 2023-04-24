@@ -5,6 +5,11 @@ from argparse import ArgumentParser
 from pdf2image import convert_from_path
 from PyPDF2 import PdfWriter, PdfReader
 import os
+from google_drive_ocr import GoogleOCRApplication
+import glob
+app = GoogleOCRApplication('client_secret.json')
+
+
 
 output_dir = "media"
 
@@ -42,6 +47,7 @@ def crop_img(input_img):
             crop_img = im1[y:y+h, x:x+w]
             out_crop_img_path = os.path.join(output_dir,f"{get_filename(input_img)}_{str(count).zfill(5)}.jpg")
             cv2.imwrite(out_crop_img_path,crop_img)
+            app.perform_ocr(out_crop_img_path)
     print(f"croped rectangles from image : {get_filename(input_img)}")
 
 
@@ -68,7 +74,8 @@ def convert_pdf_to_images(input_file):
         images = convert_from_path(output_filename)
         images[0].save(output_filename_img, 'JPEG')
         crop_img(output_filename_img)
-    print("Done cropping")
+        
+    print("Done cropping and OCR")
     return directory,True
 
         # for i in range(len(images)):
@@ -77,7 +84,7 @@ def convert_pdf_to_images(input_file):
 
 
 
-
+        
 # def cropimage(input_file):
 #     if not output_file:
 #         parts = input_file.split('.')
@@ -89,6 +96,18 @@ def convert_pdf_to_images(input_file):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument('--input', action='store', type=str,help="pdf file to autocrop")
+    parser.add_argument('--input_folder', action='store', type=str,help="pdf file to autocrop")
     args = parser.parse_args()
-    convert_pdf_to_images(args.input)
+    input_folder = args.input_filder
+
+    all_pdf = glob.glob(input_folder + "/*.pdf")
+    for single_pdf in all_pdf:
+        convert_pdf_to_images(single_pdf)
+
+
+    os.system("rm -rf media")
+    all_jpg = glob.glob("output/*/*.jpg")
+    for jpg in all_jpg:
+        os.sytem("rm " + jpg")
+
+   
